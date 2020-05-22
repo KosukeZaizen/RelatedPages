@@ -20,14 +20,14 @@ class PagesForTheTitles extends Component {
             <div>
                 <h1>{"dog and cat"}</h1>
                 <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
-                {renderForecastsTable(this.props)}
+                {renderTable(this.props)}
                 {renderPagination(this.props)}
             </div>
         );
     }
 }
 
-function renderForecastsTable(props) {
+function renderTable(props) {
     return (
         <table className='table table-striped'>
             <thead>
@@ -37,10 +37,10 @@ function renderForecastsTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.forecasts.map(forecast =>
-                    <tr key={forecast.link}>
-                        <td>{forecast.pageName}</td>
-                        <td>{forecast.explanation}</td>
+                {props.pages.map(page =>
+                    <tr key={page.link}>
+                        <td>{page.pageName}</td>
+                        <td>{page.explanation}</td>
                     </tr>
                 )}
             </tbody>
@@ -60,6 +60,6 @@ function renderPagination(props) {
 }
 
 export default connect(
-    state => state.weatherForecasts,
+    state => state.relatedPages,
     dispatch => bindActionCreators(actionCreators, dispatch)
 )(PagesForTheTitles);

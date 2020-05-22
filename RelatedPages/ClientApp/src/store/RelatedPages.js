@@ -1,45 +1,51 @@
-const requestWeatherForecastsType = 'REQUEST_WEATHER_FORECASTS';
-const receiveWeatherForecastsType = 'RECEIVE_WEATHER_FORECASTS';
-const initialState = { forecasts: [], isLoading: false };
+const requestType = 'REQUEST';
+const receiveTitlesType = 'RECEIVE_TITLES';
+const receivePagesType = 'RECEIVE_PAGES';
+const initialState = { titles: [], pages: [], isLoading: false };
 
 export const actionCreators = {
-    requestWeatherForecasts: publishDate => async (dispatch, getState) => {
+    requestTitlesForTheDate: publishDate => async (dispatch, getState) => {
 
-        dispatch({ type: requestWeatherForecastsType, publishDate });
+        dispatch({ type: requestType, publishDate });
 
         const url = `api/RelatedPages/getTitlesForTheDay?publishDate=${publishDate}`;
-        console.log(url);
         const response = await fetch(url);
-        const forecasts = await response.json();
+        const titles = await response.json();
 
-        dispatch({ type: receiveWeatherForecastsType, publishDate, forecasts });
+        dispatch({ type: receiveTitlesType, titles });
     },
     requestPagesForTheTitle: titleId => async (dispatch, getState) => {
 
         const url = `api/RelatedPages/getPagesForTitle?titleId=${titleId}`;
         const response = await fetch(url);
-        const forecasts = await response.json();
+        const pages = await response.json();
 
-        dispatch({ type: receiveWeatherForecastsType, titleId, forecasts });
+        dispatch({ type: receivePagesType, pages });
     }
 };
 
 export const reducer = (state, action) => {
     state = state || initialState;
 
-    if (action.type === requestWeatherForecastsType) {
+    if (action.type === requestType) {
         return {
             ...state,
-            startDateIndex: action.startDateIndex,
             isLoading: true
         };
     }
 
-    if (action.type === receiveWeatherForecastsType) {
+    if (action.type === receiveTitlesType) {
         return {
             ...state,
-            startDateIndex: action.startDateIndex,
-            forecasts: action.forecasts,
+            titles: action.titles,
+            isLoading: false
+        };
+    }
+
+    if (action.type === receivePagesType) {
+        return {
+            ...state,
+            pages: action.pages,
             isLoading: false
         };
     }

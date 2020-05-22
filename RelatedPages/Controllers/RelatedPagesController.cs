@@ -32,22 +32,21 @@ namespace RelatedPages.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Page> getPagesForTitle(int titleId)
         {
+            var con = new DBCon();
             var l = new List<Page>();
 
-            var page1 = new Page();
-            page1.titleId = 1;
-            page1.pageName = "information about dog and cat | wikipedia";
-            page1.link = "https://aaa/aaa/dogAndCat";
-            page1.explanation = "This page is about them.";
+            var result = con.ExecuteSelect($"SELECT * FROM Pages WHERE titleId = @titleId;", new Dictionary<string, object[]> { { "@titleId", new object[2] { SqlDbType.Int, titleId } } });
 
-            var page2 = new Page();
-            page2.titleId = 1;
-            page2.pageName = "information about dog and cat | dictionary";
-            page2.link = "https://bbb/bbb/dogAndCat";
-            page2.explanation = "This page is about them!!!!!!!!!!!!!";
+            result.ForEach((e) =>
+            {
+                var page = new Page();
+                page.titleId = (int)e["titleId"];
+                page.link = (string)e["link"];
+                page.pageName = (string)e["pageName"];
+                page.explanation = (string)e["explanation"];
 
-            l.Add(page1);
-            l.Add(page2);
+                l.Add(page);
+            });
 
             return l;
         }

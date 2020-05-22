@@ -12,7 +12,7 @@ class PagesForTheTitles extends Component {
 
     ensureDataFetched() {
         const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-        this.props.requestPagesForTheTitle(startDateIndex);
+        this.props.requestPagesForTheTitle(1);
     }
 
     render() {
@@ -32,8 +32,8 @@ function renderForecastsTable(props) {
         <table className='table table-striped'>
             <thead>
                 <tr>
-                    <th>Page Name</th>
-                    <th>Explanation</th>
+                    <th>Page Title</th>
+                    <th>Snippet</th>
                 </tr>
             </thead>
             <tbody>

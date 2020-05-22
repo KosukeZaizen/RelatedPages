@@ -10,11 +10,6 @@ class PagesForTheTitles extends Component {
         this.ensureDataFetched();
     }
 
-    componentDidUpdate() {
-        // This method is called when the route parameters change
-        this.ensureDataFetched();
-    }
-
     ensureDataFetched() {
         const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
         this.props.requestPagesForTheTitle(startDateIndex);
@@ -23,7 +18,7 @@ class PagesForTheTitles extends Component {
     render() {
         return (
             <div>
-                <h1>2020/05/02</h1>
+                <h1>{"dog and cat"}</h1>
                 <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
                 {renderForecastsTable(this.props)}
                 {renderPagination(this.props)}

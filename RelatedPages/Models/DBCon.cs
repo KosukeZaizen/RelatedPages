@@ -8,7 +8,7 @@ namespace RelatedPages.Models
 {
     public class DBCon
     {
-        public List<Dictionary<string, Object>> ExecuteSelect(string sql, Dictionary<string, object[]> dicParams)
+        public List<Dictionary<string, Object>> ExecuteSelect(string sql, Dictionary<string, object[]> dicParams = null)
         {
             using (var connection = new SqlConnection(PrivateConsts.CONNECTION_STRING))
             using (var command = new SqlCommand(sql, connection))

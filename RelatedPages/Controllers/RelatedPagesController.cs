@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using RelatedPages.Models;
 
@@ -10,20 +11,20 @@ namespace RelatedPages.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Title> getTitlesForTheDay(int publishDate)
         {
+            var con = new DBCon();
             var l = new List<Title>();
 
-            var title1 = new Title();
-            title1.publishDate = 20150522;
-            title1.titleId = 1;
-            title1.title = "dog and cat";
+            var result = con.ExecuteSelect($"SELECT * FROM Titles WHERE publishDate = @publishDate;", new Dictionary<string, object[]> { { "@publishDate", new object[2] { SqlDbType.Int, publishDate } } });
 
-            var title2 = new Title();
-            title2.publishDate = 20150522;
-            title2.titleId = 2;
-            title2.title = "bird and car";
+            result.ForEach((e) =>
+            {
+                var title = new Title();
+                title.publishDate = (int)e["publishDate"];
+                title.titleId = (int)e["titleId"];
+                title.title = (string)e["title"];
 
-            l.Add(title1);
-            l.Add(title2);
+                l.Add(title);
+            });
 
             return l;
         }

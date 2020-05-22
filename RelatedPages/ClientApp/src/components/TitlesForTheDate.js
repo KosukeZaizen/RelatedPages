@@ -10,14 +10,9 @@ class TitlesForTheDate extends Component {
     this.ensureDataFetched();
   }
 
-  componentDidUpdate() {
-    // This method is called when the route parameters change
-    this.ensureDataFetched();
-  }
-
   ensureDataFetched() {
     const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-    this.props.requestWeatherForecasts(startDateIndex);
+    this.props.requestWeatherForecasts(20200521);
   }
 
   render() {
@@ -43,7 +38,7 @@ function renderForecastsTable(props) {
       </thead>
       <tbody>
         {props.forecasts.map(forecast =>
-          <tr key={forecast.dateFormatted}>
+          <tr key={forecast.titleId}>
             <td>{forecast.title}</td>
             <td>{2} articles</td>
           </tr>

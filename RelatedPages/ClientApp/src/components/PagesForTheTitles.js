@@ -20,7 +20,7 @@ class PagesForTheTitles extends Component {
         const page = this.props.pages && this.props.pages.pop();
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
-        const description = `These are the pages related to ${title}.`;
+        const description = `This is a list of the pages related to ${title}.`;
         return (
             <div>
                 <Head

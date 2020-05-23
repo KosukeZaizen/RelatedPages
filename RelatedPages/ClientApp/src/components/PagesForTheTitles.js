@@ -70,7 +70,7 @@ function renderTable(props) {
             <tbody>
                 {props.pages.map((page, i) =>
                     <tr key={i}>
-                        <td><a href={page.link}>{page.pageName}</a></td>
+                        <td><a href={page.link} target="_blank" rel="noopener">{page.pageName}</a></td>
                         <td>{page.explanation}</td>
                     </tr>
                 )}

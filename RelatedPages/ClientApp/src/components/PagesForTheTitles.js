@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
+import Head from './Helmet';
 
 class PagesForTheTitles extends Component {
     componentDidMount() {
@@ -19,8 +20,13 @@ class PagesForTheTitles extends Component {
         const page = this.props.pages && this.props.pages.pop();
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
+        const description = `These are the pages related to ${title}.`;
         return (
             <div>
+                <Head
+                    title={title}
+                    desc={description}
+                />
                 <div className="breadcrumbs" itemScope itemType="https://schema.org/BreadcrumbList" style={{ textAlign: "left" }}>
                     <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
                         <Link to="/" itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
@@ -50,7 +56,7 @@ class PagesForTheTitles extends Component {
                 <hr />
                 <h1>{title}</h1>
                 <hr />
-                <p>These are the pages related to {title}.</p>
+                <p>{description}</p>
                 {renderTable(this.props)}
             </div>
         );

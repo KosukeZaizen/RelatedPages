@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
 import { getEnglishDate } from '../common/functions';
+import Head from './Helmet';
 
 class TitlesForTheDate extends Component {
     componentDidMount() {
@@ -16,10 +17,16 @@ class TitlesForTheDate extends Component {
     }
 
     render() {
+        const title = "Related Pages";
+        const description = "This is a website to show the lists of the good website related to specific keywords!";
         return (
             <div>
-                <h1>Related Pages</h1>
-                <p>This is a website to show the lists of the good website related to specific keywords!</p>
+                <Head
+                    title={title}
+                    desc={description}
+                />
+                <h1>{title}</h1>
+                <p>{description}</p>
                 {renderTable(this.props)}
                 {/*renderPagination(this.props)*/}
             </div>

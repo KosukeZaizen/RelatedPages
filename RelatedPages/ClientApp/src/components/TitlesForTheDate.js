@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
 import { getEnglishDate } from '../common/functions';
+import Head from './Helmet';
 
 class TitlesForTheDate extends Component {
     constructor(props) {
@@ -32,8 +33,13 @@ class TitlesForTheDate extends Component {
 
     render() {
         const date = getEnglishDate(this.state.date);
+        const description = `Themes searched on ${date}`;
         return (
             <div>
+                <Head
+                    title={date}
+                    desc={description}
+                />
                 <div className="breadcrumbs" itemScope itemType="https://schema.org/BreadcrumbList" style={{ textAlign: "left" }}>
                     <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
                         <Link to="/" itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
@@ -53,7 +59,7 @@ class TitlesForTheDate extends Component {
                 </div>
                 <hr />
                 <h1>{date}</h1>
-                <p>Themes searched on {date}</p>
+                <p>{description}</p>
                 {renderTable(this.props)}
                 {renderPagination(this.props)}
             </div>

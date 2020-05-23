@@ -26,9 +26,13 @@ class TitlesForTheDate extends Component {
 
         const dateWithoutMinus = date.split("-").join("");
         this.props.requestTitlesForTheDate(dateWithoutMinus);
+        this.props.requestAllDates();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(preciousProps) {
+        if (preciousProps.location !== this.props.location) {
+            this.fetchData();
+        }
     }
 
     render() {
@@ -61,7 +65,7 @@ class TitlesForTheDate extends Component {
                 <h1>{date}</h1>
                 <p>{description}</p>
                 {renderTable(this.props)}
-                {renderPagination(this.props)}
+                {renderPagination({ ...this.props, date: this.state.date })}
             </div>
         );
     }
@@ -89,12 +93,19 @@ function renderTable(props) {
 }
 
 function renderPagination(props) {
-    const prevStartDateIndex = (props.startDateIndex || 0) - 5;
-    const nextStartDateIndex = (props.startDateIndex || 0) + 5;
+    const { date } = props;
+    const dates = props.dates.map(d => d.publishDate.split("T").shift());
+
+    let currentIndex = -1;
+    dates.forEach((d, i) => {
+        if (d === date) currentIndex = i;
+    });
+    const prevDate = dates[currentIndex + 1];
+    const nextDate = dates[currentIndex - 1];
 
     return <p className='clearfix text-center'>
-        <Link className='btn btn-default pull-left' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
-        <Link className='btn btn-default pull-right' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
+        {prevDate && <Link className='btn btn-default pull-left' to={`/date/${prevDate}`}>{"<< Previous Date"}</Link>}
+        {nextDate && <Link className='btn btn-default pull-right' to={`/date/${nextDate}`}>{"Next Date >>"}</Link>}
         {props.isLoading ? <span>Loading...</span> : []}
     </p>;
 }

@@ -8,7 +8,7 @@ import PagesForTheTitles from './components/PagesForTheTitles';
 export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/fetch-data/:date?' component={TitlesForTheDate} />
-        <Route path='/counter/:title?' component={PagesForTheTitles} />
+        <Route path='/date/:date?' component={TitlesForTheDate} />
+        <Route path='/theme/:titleId?' component={PagesForTheTitles} />
     </Layout>
 );

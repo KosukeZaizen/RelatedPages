@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,26 @@ namespace RelatedPages.Controllers
     public class RelatedPagesController : Controller
     {
         [HttpGet("[action]")]
+        public IEnumerable<object> getAllDates()
+        {
+            var con = new DBCon();
+            var l = new List<object>();
+
+            var result = con.ExecuteSelect($"SELECT publishDate, count(titleId) as cnt FROM Titles GROUP BY publishDate ORDER BY publishDate;");
+
+            result.ForEach((e) =>
+            {
+                var publishDate = DateTime.ParseExact(((int)e["publishDate"]).ToString(), "yyyyMMdd", null);
+                var cnt = (int)e["cnt"];
+
+                var dates = new { publishDate, cnt };
+                l.Add(dates);
+            });
+
+            return l;
+        }
+
+        [HttpGet("[action]")]
         public IEnumerable<Title> getTitlesForTheDay(int publishDate)
         {
             var con = new DBCon();
@@ -19,7 +40,7 @@ namespace RelatedPages.Controllers
             result.ForEach((e) =>
             {
                 var title = new Title();
-                title.publishDate = (int)e["publishDate"];
+                title.publishDate = DateTime.ParseExact(((int)e["publishDate"]).ToString(), "yyyyMMdd", null);
                 title.titleId = (int)e["titleId"];
                 title.title = (string)e["title"];
 
@@ -35,12 +56,14 @@ namespace RelatedPages.Controllers
             var con = new DBCon();
             var l = new List<Page>();
 
-            var result = con.ExecuteSelect($"SELECT * FROM Pages WHERE titleId = @titleId;", new Dictionary<string, object[]> { { "@titleId", new object[2] { SqlDbType.Int, titleId } } });
+            var result = con.ExecuteSelect($"SELECT p.titleId, p.pageName, p.link, p.explanation, t.publishDate, t.title FROM Pages as p inner join Titles as t on p.titleId = t.titleId and p.titleId = @titleId;", new Dictionary<string, object[]> { { "@titleId", new object[2] { SqlDbType.Int, titleId } } });
 
             result.ForEach((e) =>
             {
                 var page = new Page();
                 page.titleId = (int)e["titleId"];
+                page.title = (string)e["title"];
+                page.publishDate = DateTime.ParseExact(((int)e["publishDate"]).ToString(), "yyyyMMdd", null);
                 page.link = (string)e["link"];
                 page.pageName = (string)e["pageName"];
                 page.explanation = (string)e["explanation"];

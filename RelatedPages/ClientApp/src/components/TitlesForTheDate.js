@@ -3,23 +3,41 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
+import { getEnglishDate } from '../common/functions';
 
 class TitlesForTheDate extends Component {
-    componentDidMount() {
-        // This method is called when the component is first added to the document
-        this.ensureDataFetched();
+    constructor(props) {
+        super(props);
+
+        this.fetchData();
+
+        this.state = {
+            date: "",
+        };
     }
 
-    ensureDataFetched() {
-        const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-        this.props.requestTitlesForTheDate(20200521);
+    componentDidMount() {
+        // This method is called when the component is first added to the document
+        this.fetchData();
+    }
+
+    fetchData() {
+        const date = this.props.match.params.date;
+        if (date !== (this.state && this.state.date)) this.setState({ date });
+
+        const dateWithoutMinus = date.split("-").join("");
+        this.props.requestTitlesForTheDate(dateWithoutMinus);
+    }
+
+    componentDidUpdate() {
     }
 
     render() {
+        const date = getEnglishDate(this.state.date);
         return (
             <div>
-                <h1>2020/05/02</h1>
-                <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
+                <h1>{date}</h1>
+                <p>Themes searched on {date}.</p>
                 {renderTable(this.props)}
                 {renderPagination(this.props)}
             </div>
@@ -39,7 +57,7 @@ function renderTable(props) {
             <tbody>
                 {props.titles.map(title =>
                     <tr key={title.titleId}>
-                        <td>{title.title}</td>
+                        <td><Link to={"/theme/" + title.titleId}>{title.title}</Link></td>
                         <td>{2} articles</td>
                     </tr>
                 )}

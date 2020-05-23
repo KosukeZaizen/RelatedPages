@@ -7,19 +7,20 @@ import { actionCreators } from '../store/RelatedPages';
 class PagesForTheTitles extends Component {
     componentDidMount() {
         // This method is called when the component is first added to the document
-        this.ensureDataFetched();
+        this.fetchData();
     }
 
-    ensureDataFetched() {
-        const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-        this.props.requestPagesForTheTitle(1);
+    fetchData() {
+        const titleId = parseInt(this.props.match.params.titleId, 10) || 0;
+        this.props.requestPagesForTheTitle(titleId);
     }
 
     render() {
+        const title = this.props.pages && this.props.pages.pop() && this.props.pages.pop().title;
         return (
             <div>
-                <h1>{"dog and cat"}</h1>
-                <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
+                <h1>{title}</h1>
+                <p>Below is the pages related to {title}.</p>
                 {renderTable(this.props)}
                 {renderPagination(this.props)}
             </div>
@@ -28,6 +29,7 @@ class PagesForTheTitles extends Component {
 }
 
 function renderTable(props) {
+    console.log(props);
     return (
         <table className='table table-striped'>
             <thead>
@@ -37,9 +39,9 @@ function renderTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.pages.map(page =>
-                    <tr key={page.link}>
-                        <td>{page.pageName}</td>
+                {props.pages.map((page, i) =>
+                    <tr key={i}>
+                        <td><a href={page.link}>{page.pageName}</a></td>
                         <td>{page.explanation}</td>
                     </tr>
                 )}

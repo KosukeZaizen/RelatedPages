@@ -1,8 +1,10 @@
+using System;
+
 namespace RelatedPages.Models
 {
     public class Title
     {
-        public int publishDate { get; set; }
+        public DateTime publishDate { get; set; }
         public string title { get; set; }
         public int titleId { get; set; }
     }

@@ -15,7 +15,7 @@ namespace RelatedPages.Controllers
             var con = new DBCon();
             var l = new List<object>();
 
-            var result = con.ExecuteSelect($"SELECT publishDate, count(titleId) as cnt FROM Titles GROUP BY publishDate ORDER BY publishDate;");
+            var result = con.ExecuteSelect($"SELECT publishDate, count(titleId) as cnt FROM Titles GROUP BY publishDate ORDER BY publishDate desc;");
 
             result.ForEach((e) =>
             {
@@ -35,7 +35,15 @@ namespace RelatedPages.Controllers
             var con = new DBCon();
             var l = new List<Title>();
 
-            var result = con.ExecuteSelect($"SELECT * FROM Titles WHERE publishDate = @publishDate;", new Dictionary<string, object[]> { { "@publishDate", new object[2] { SqlDbType.Int, publishDate } } });
+            string sql = @"
+select t.publishDate, t.title, t.titleId, p.cnt from (
+SELECT * FROM Titles WHERE publishDate = @publishDate
+) as t inner join (
+SELECT count(*) as cnt, titleId from Pages GROUP BY titleId
+) as p on t.titleId = p.titleId;
+";
+
+            var result = con.ExecuteSelect(sql, new Dictionary<string, object[]> { { "@publishDate", new object[2] { SqlDbType.Int, publishDate } } });
 
             result.ForEach((e) =>
             {
@@ -43,6 +51,7 @@ namespace RelatedPages.Controllers
                 title.publishDate = DateTime.ParseExact(((int)e["publishDate"]).ToString(), "yyyyMMdd", null);
                 title.titleId = (int)e["titleId"];
                 title.title = (string)e["title"];
+                title.cnt = (int)e["cnt"];
 
                 l.Add(title);
             });

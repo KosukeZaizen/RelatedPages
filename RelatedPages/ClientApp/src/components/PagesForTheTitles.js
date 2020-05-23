@@ -16,13 +16,42 @@ class PagesForTheTitles extends Component {
     }
 
     render() {
-        const title = this.props.pages && this.props.pages.pop() && this.props.pages.pop().title;
+        const page = this.props.pages && this.props.pages.pop();
+        const title = page && page.title;
+        const publishDate = page && page.publishDate.split("T").shift();
         return (
             <div>
+                <div className="breadcrumbs" itemScope itemType="https://schema.org/BreadcrumbList" style={{ textAlign: "left" }}>
+                    <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
+                        <Link to="/" itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            <span itemProp="name">
+                                {"Home"}
+                            </span>
+                        </Link>
+                        <meta itemProp="position" content="1" />
+                    </span>
+                    {" > "}
+                    <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
+                        <Link to={"/date/" + publishDate} itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            <span itemProp="name">
+                                {publishDate}
+                            </span>
+                            <meta itemProp="position" content="2" />
+                        </Link>
+                    </span>
+                    {" > "}
+                    <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
+                        <span itemProp="name" style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            {title}
+                        </span>
+                        <meta itemProp="position" content="3" />
+                    </span>
+                </div>
+                <hr />
                 <h1>{title}</h1>
-                <p>Below is the pages related to {title}.</p>
+                <hr />
+                <p>These are the pages related to {title}.</p>
                 {renderTable(this.props)}
-                {renderPagination(this.props)}
             </div>
         );
     }
@@ -48,17 +77,6 @@ function renderTable(props) {
             </tbody>
         </table>
     );
-}
-
-function renderPagination(props) {
-    const prevStartDateIndex = (props.startDateIndex || 0) - 5;
-    const nextStartDateIndex = (props.startDateIndex || 0) + 5;
-
-    return <p className='clearfix text-center'>
-        <Link className='btn btn-default pull-left' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
-        <Link className='btn btn-default pull-right' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
-        {props.isLoading ? <span>Loading...</span> : []}
-    </p>;
 }
 
 export default connect(

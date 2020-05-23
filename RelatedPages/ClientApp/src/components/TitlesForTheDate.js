@@ -9,8 +9,6 @@ class TitlesForTheDate extends Component {
     constructor(props) {
         super(props);
 
-        this.fetchData();
-
         this.state = {
             date: "",
         };
@@ -36,8 +34,26 @@ class TitlesForTheDate extends Component {
         const date = getEnglishDate(this.state.date);
         return (
             <div>
+                <div className="breadcrumbs" itemScope itemType="https://schema.org/BreadcrumbList" style={{ textAlign: "left" }}>
+                    <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
+                        <Link to="/" itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            <span itemProp="name">
+                                {"Home"}
+                            </span>
+                        </Link>
+                        <meta itemProp="position" content="1" />
+                    </span>
+                    {" > "}
+                    <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
+                        <span itemProp="name" style={{ marginRight: "5px", marginLeft: "5px" }}>
+                            {date}
+                        </span>
+                        <meta itemProp="position" content="2" />
+                    </span>
+                </div>
+                <hr />
                 <h1>{date}</h1>
-                <p>Themes searched on {date}.</p>
+                <p>Themes searched on {date}</p>
                 {renderTable(this.props)}
                 {renderPagination(this.props)}
             </div>
@@ -58,7 +74,7 @@ function renderTable(props) {
                 {props.titles.map(title =>
                     <tr key={title.titleId}>
                         <td><Link to={"/theme/" + title.titleId}>{title.title}</Link></td>
-                        <td>{2} articles</td>
+                        <td>{title.cnt} articles</td>
                     </tr>
                 )}
             </tbody>

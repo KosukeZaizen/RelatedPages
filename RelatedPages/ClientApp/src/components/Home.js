@@ -21,7 +21,7 @@ class TitlesForTheDate extends Component {
                 <h1>Related Pages</h1>
                 <p>This is a website to show the lists of the good website related to specific keywords!</p>
                 {renderTable(this.props)}
-                {renderPagination(this.props)}
+                {/*renderPagination(this.props)*/}
             </div>
         );
     }

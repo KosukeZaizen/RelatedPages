@@ -18,7 +18,7 @@ class TitlesForTheDate extends Component {
 
     render() {
         const title = "Related Pages";
-        const description = "This is a website to show the lists of the good website related to specific keywords!";
+        const description = "This is a website shows a list of the best websites related to specific keywords!";
         return (
             <div>
                 <Head

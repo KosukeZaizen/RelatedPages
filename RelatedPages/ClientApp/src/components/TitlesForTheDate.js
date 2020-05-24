@@ -69,6 +69,7 @@ class TitlesForTheDate extends Component {
                 <hr />
                 <h1>{date}</h1>
                 <p>{description}</p>
+                {renderPagination({ ...this.props, date: this.state.date })}
                 {renderTable(this.props)}
                 {renderPagination({ ...this.props, date: this.state.date })}
             </div>

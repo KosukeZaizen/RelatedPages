@@ -35,6 +35,7 @@ class TitlesForTheDate extends Component {
 }
 
 function renderTable(props) {
+    const { dates } = props;
     return (
         <table className='table table-striped'>
             <thead>
@@ -44,12 +45,14 @@ function renderTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.dates.map((d, i) =>
+                {dates.length > 0 ? dates.map((d, i) =>
                     <tr key={i}>
                         <td><Link to={"/date/" + d.publishDate.split("T")[0]}>{getEnglishDate(d.publishDate.split("T")[0])}</Link></td>
                         <td>{d.cnt} themes</td>
                     </tr>
-                )}
+                )
+                    :
+                    <tr><td>Loading...</td><td></td></tr>}
             </tbody>
         </table>
     );

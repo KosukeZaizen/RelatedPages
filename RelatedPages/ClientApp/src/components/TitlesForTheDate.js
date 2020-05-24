@@ -72,6 +72,7 @@ class TitlesForTheDate extends Component {
 }
 
 function renderTable(props) {
+    const { titles } = props;
     return (
         <table className='table table-striped'>
             <thead>
@@ -81,12 +82,14 @@ function renderTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.titles.map(title =>
+                {titles.length > 0 ? titles.map(title =>
                     <tr key={title.titleId}>
                         <td><Link to={"/theme/" + title.titleId}>{title.title}</Link></td>
                         <td>{title.cnt} articles</td>
                     </tr>
-                )}
+                )
+                    :
+                    <tr><td>Loading...</td><td></td></tr>}
             </tbody>
         </table>
     );

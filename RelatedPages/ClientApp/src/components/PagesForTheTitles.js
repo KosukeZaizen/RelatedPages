@@ -64,7 +64,7 @@ class PagesForTheTitles extends Component {
 }
 
 function renderTable(props) {
-    console.log(props);
+    const { pages } = props;
     return (
         <table className='table table-striped'>
             <thead>
@@ -74,12 +74,14 @@ function renderTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.pages.map((page, i) =>
+                {pages.length > 0 ? pages.map((page, i) =>
                     <tr key={i}>
                         <td><a href={page.link} target="_blank" rel="noopener">{page.pageName}</a></td>
                         <td>{page.explanation}</td>
                     </tr>
-                )}
+                )
+                    :
+                    <tr><td>Loading...</td><td></td></tr>}
             </tbody>
         </table>
     );

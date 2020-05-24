@@ -5,16 +5,13 @@ const PageHeader = props => {
     return (
         <Helmet>
             {
-                props.title ?
-                    <title>{props.title}</title>
-                    :
-                    null
+                props.title && <title>{props.title}</title>
             }
             {
-                props.desc ?
-                    <meta name="description" content={props.desc} />
-                    :
-                    null
+                props.desc && <meta name="description" content={props.desc} />
+            }
+            {
+                props.noindex && <meta name="robots" content="noindex" />
             }
         </Helmet>
     );

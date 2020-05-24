@@ -68,21 +68,7 @@ namespace RelatedPages
                     var domain = "https://pages.lingual-ninja.com";
                     var lstSitemap = new List<Dictionary<string, string>>();
 
-                    IEnumerable<string> allDates = getAllDates().Select(d => ((DateTime)d.publishDate).ToString().Replace("/", "-"));
-                    allDates = allDates.Select(d =>
-                    {
-                        var arrD = d.Split(" ");
-                        var arrTime = arrD[1].Split(":");
-                        for(var i = 0; i < 3; i++)
-                        {
-                            if (arrTime[i].Length == 1)
-                            {
-                                arrTime[i] = "0" + arrTime[i];
-                            }
-                        }
-
-                        return arrD[0] + "T" + string.Join(":", arrTime);
-                    });
+                    IEnumerable<string> allDates = getAllDates().Select(d => ((DateTime)d.publishDate).ToString("yyyy-MM-dd"));
 
                     //top page
                     var dic1 = new Dictionary<string, string>();
@@ -93,9 +79,8 @@ namespace RelatedPages
                     //date page
                     foreach (var date in allDates) {
                         var dic2 = new Dictionary<string, string>();
-                        string strDate = date.Split("T")[0];
-                        int intDate = int.Parse(strDate.Replace("-", ""));
-                        dic2["loc"] = domain + "/date/" + strDate;
+                        int intDate = int.Parse(date.Replace("-", ""));
+                        dic2["loc"] = domain + "/date/" + date;
                         dic2["lastmod"] = date;
                         lstSitemap.Add(dic2);
 

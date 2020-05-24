@@ -115,7 +115,7 @@ function renderPagination(props) {
     return <p className='clearfix text-center'>
         {prevDate && <Link className='btn btn-default pull-left' to={`/date/${prevDate}`}>{"<< Previous Date"}</Link>}
         {nextDate && <Link className='btn btn-default pull-right' to={`/date/${nextDate}`}>{"Next Date >>"}</Link>}
-        {props.isLoading ? <span>Loading...</span> : []}
+        {props.isLoading ? <span><br />Loading...</span> : []}
     </p>;
 }
 

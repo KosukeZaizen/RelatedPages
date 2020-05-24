@@ -12,7 +12,7 @@ class PagesForTheTitles extends Component {
     }
 
     fetchData() {
-        const titleId = parseInt(this.props.match.params.titleId, 10) || 0;
+        const titleId = this.props.match.params.titleId;
         this.props.requestPagesForTheTitle(titleId);
     }
 
@@ -76,7 +76,7 @@ function renderTable(props) {
             <tbody>
                 {pages.length > 0 ? pages.map((page, i) =>
                     <tr key={i}>
-                        <td><a href={page.link} target="_blank" rel="noopener">{page.pageName}</a></td>
+                        <td><a href={page.link} target="_blank" rel="noopener noreferrer">{page.pageName}</a></td>
                         <td>{page.explanation}</td>
                     </tr>
                 )

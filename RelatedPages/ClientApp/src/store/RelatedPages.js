@@ -6,32 +6,44 @@ const initialState = { dates: [], titles: [], pages: [], isLoading: false };
 
 export const actionCreators = {
     requestAllDates: () => async (dispatch, getState) => {
+        try {
+            dispatch({ type: requestType });
 
-        dispatch({ type: requestType });
+            const url = `api/RelatedPages/getAllDates`;
+            const response = await fetch(url);
+            const dates = await response.json();
+            if (!dates || dates.length <= 0) window.location.href = `/not-found?p=${window.location.pathname}`;
 
-        const url = `api/RelatedPages/getAllDates`;
-        const response = await fetch(url);
-        const dates = await response.json();
-
-        dispatch({ type: receiveDatesType, dates });
+            dispatch({ type: receiveDatesType, dates });
+        } catch (e) {
+            window.location.href = `/not-found?p=${window.location.pathname}`;
+        }
     },
     requestTitlesForTheDate: publishDate => async (dispatch, getState) => {
+        try {
+            dispatch({ type: requestType });
 
-        dispatch({ type: requestType });
+            const url = `api/RelatedPages/getTitlesForTheDay?publishDate=${publishDate}`;
+            const response = await fetch(url);
+            const titles = await response.json();
+            if (!titles || titles.length <= 0) window.location.href = `/not-found?p=${window.location.pathname}`;
 
-        const url = `api/RelatedPages/getTitlesForTheDay?publishDate=${publishDate}`;
-        const response = await fetch(url);
-        const titles = await response.json();
-
-        dispatch({ type: receiveTitlesType, titles });
+            dispatch({ type: receiveTitlesType, titles });
+        } catch (e) {
+            window.location.href = `/not-found?p=${window.location.pathname}`;
+        }
     },
     requestPagesForTheTitle: titleId => async (dispatch, getState) => {
+        try {
+            const url = `api/RelatedPages/getPagesForTitle?titleId=${titleId}`;
+            const response = await fetch(url);
+            const pages = await response.json();
+            if (!pages || pages.length <= 0) window.location.href = `/not-found?p=${window.location.pathname}`;
 
-        const url = `api/RelatedPages/getPagesForTitle?titleId=${titleId}`;
-        const response = await fetch(url);
-        const pages = await response.json();
-
-        dispatch({ type: receivePagesType, pages });
+            dispatch({ type: receivePagesType, pages });
+        } catch (e) {
+            window.location.href = `/not-found?p=${window.location.pathname}`;
+        }
     }
 };
 

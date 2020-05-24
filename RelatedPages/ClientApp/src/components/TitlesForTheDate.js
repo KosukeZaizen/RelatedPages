@@ -25,6 +25,11 @@ class TitlesForTheDate extends Component {
         if (date !== (this.state && this.state.date)) this.setState({ date });
 
         const dateWithoutMinus = date.split("-").join("");
+
+        if (date.length !== 10 || date.length - dateWithoutMinus.length !== 2 || date[4] !== "-" || date[7] !== "-") {
+            window.location.href = `/not-found?p=${window.location.pathname}`;
+        }
+
         this.props.requestTitlesForTheDate(dateWithoutMinus);
         this.props.requestAllDates();
     }

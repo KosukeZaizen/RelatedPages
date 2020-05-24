@@ -28,7 +28,6 @@ class TitlesForTheDate extends Component {
                 <h1>{title}</h1>
                 <p>{description}</p>
                 {renderTable(this.props)}
-                {/*renderPagination(this.props)*/}
             </div>
         );
     }
@@ -56,17 +55,6 @@ function renderTable(props) {
             </tbody>
         </table>
     );
-}
-
-function renderPagination(props) {
-    const prevStartDateIndex = (props.startDateIndex || 0) - 5;
-    const nextStartDateIndex = (props.startDateIndex || 0) + 5;
-
-    return <p className='clearfix text-center'>
-        <Link className='btn btn-default pull-left' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
-        <Link className='btn btn-default pull-right' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
-        {props.isLoading ? <span>Loading...</span> : []}
-    </p>;
 }
 
 export default connect(

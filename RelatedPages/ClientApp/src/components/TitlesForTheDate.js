@@ -34,8 +34,8 @@ class TitlesForTheDate extends Component {
         this.props.requestAllDates();
     }
 
-    componentDidUpdate(preciousProps) {
-        if (preciousProps.location !== this.props.location) {
+    componentDidUpdate(previousProps) {
+        if (previousProps.location !== this.props.location) {
             this.fetchData();
         }
     }

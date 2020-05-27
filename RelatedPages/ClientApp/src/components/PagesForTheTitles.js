@@ -15,14 +15,18 @@ class PagesForTheTitles extends Component {
     fetchData() {
         const titleId = this.props.match.params.titleId;
         this.props.requestPagesForTheTitle(titleId);
+
+        const page = this.props.pages && this.props.pages[0];
+        const publishDate = page && page.publishDate.split("T").shift();
+
+        publishDate && this.props.requestTitlesForTheDate(publishDate.split("-").join(""));
     }
 
-    componentDidUpdate(preciousProps) {
-        if (preciousProps.pages.length <= 0 && this.props.pages[0].publishDate) {
-            const page = this.props.pages && this.props.pages[0];
-            const publishDate = page && page.publishDate.split("T").shift();
-
-            publishDate && this.props.requestTitlesForTheDate(publishDate.split("-").join(""));
+    componentDidUpdate(previousProps) {
+        const pagesLoaded = previousProps.pages.length <= 0 && this.props.pages[0].publishDate;
+        const changedTheme = previousProps.location !== this.props.location;
+        if (pagesLoaded || changedTheme) {
+            this.fetchData();
         }
     }
 
@@ -112,11 +116,10 @@ function renderTable(props) {
 
 function renderOtherTable(props) {
     const titles = props.titles
-        .filter(t => t.titleId !== props.pages[0].titleId)
+        .filter(t => props.pages[0] && (t.titleId !== props.pages[0].titleId))
         .filter((t, i) => {
-
             try {
-                const l = 10;
+                const l = 13;
                 const n = Math.floor(props.titles.length / l);
                 const s = props.pages[0].titleId % n;
                 return (i + s) % n === 0;

@@ -4,7 +4,7 @@ export function getEnglishDate(date) {
     const month_english_list = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
 
     var month = Number(arrDate[1]);
-    var month_english = month_english_list[month];
+    var month_english = month_english_list[month - 1];
     var day = arrDate[2];
     var year = arrDate[0];
 

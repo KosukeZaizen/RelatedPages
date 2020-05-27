@@ -20,7 +20,9 @@ class PagesForTheTitles extends Component {
         const page = this.props.pages && this.props.pages.pop();
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
-        const description = `This is a list of the pages related to ${title}.`;
+        const description = `This is a list of the pages related to ${title}. If you want to know about ${title}, please check the list below!`;
+        const arrDesc = description.split(". ");
+        const lineChangeDesc = arrDesc.map((d, i) => <span>{d}{i < arrDesc.length - 1 && ". "}<br /></span>);
         return (
             <div>
                 <Head
@@ -55,8 +57,11 @@ class PagesForTheTitles extends Component {
                 </div>
                 <hr />
                 <h1>{title}</h1>
+                <br />
+                {lineChangeDesc}
+                <br />
                 <hr />
-                <p>{description}</p>
+                <h2>Pages related to {title}</h2>
                 {renderTable(this.props)}
             </div>
         );

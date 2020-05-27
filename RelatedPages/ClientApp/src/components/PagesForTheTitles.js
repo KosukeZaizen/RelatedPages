@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
+import { getEnglishDate } from '../common/functions';
 import Head from './Helmet';
 
 class PagesForTheTitles extends Component {
@@ -14,13 +15,29 @@ class PagesForTheTitles extends Component {
     fetchData() {
         const titleId = this.props.match.params.titleId;
         this.props.requestPagesForTheTitle(titleId);
+
+        const page = this.props.pages && this.props.pages[0];
+        const publishDate = page && page.publishDate.split("T").shift();
+
+        publishDate && this.props.requestTitlesForTheDate(publishDate.split("-").join(""));
+    }
+
+    componentDidUpdate(previousProps) {
+        const pagesLoaded = previousProps.pages.length <= 0 && this.props.pages[0].publishDate;
+        const changedTheme = previousProps.location !== this.props.location;
+        if (pagesLoaded || changedTheme) {
+            this.fetchData();
+        }
     }
 
     render() {
-        const page = this.props.pages && this.props.pages.pop();
+        const page = this.props.pages && this.props.pages[0];
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
-        const description = `This is a list of the pages related to ${title}.`;
+        const englishDate = publishDate && getEnglishDate(publishDate);
+        const description = `This is a list of the pages related to ${title}. If you want to know about ${title}, please check the list below!`;
+        const arrDesc = description.split(". ");
+        const lineChangeDesc = arrDesc.map((d, i) => <span key={i}>{d}{i < arrDesc.length - 1 && ". "}<br /></span>);
         return (
             <div>
                 <Head
@@ -55,9 +72,19 @@ class PagesForTheTitles extends Component {
                 </div>
                 <hr />
                 <h1>{title}</h1>
+                <br />
+                {lineChangeDesc}
+                <br />
                 <hr />
-                <p>{description}</p>
+                <h2>Pages related to {title}</h2>
                 {renderTable(this.props)}
+                <hr />
+                <h2>Other themes searched on {englishDate}</h2>
+                {renderOtherTable(this.props)}
+                <center>
+                    <Link to={`/date/${publishDate}`}><button>Check all themes searched on {englishDate} >></button></Link>
+                </center>
+                <br />
             </div>
         );
     }
@@ -78,6 +105,41 @@ function renderTable(props) {
                     <tr key={i}>
                         <td><a href={page.link} target="_blank" rel="noopener noreferrer">{page.pageName}</a></td>
                         <td>{page.explanation}</td>
+                    </tr>
+                )
+                    :
+                    <tr><td>Loading...</td><td></td></tr>}
+            </tbody>
+        </table>
+    );
+}
+
+function renderOtherTable(props) {
+    const titles = props.titles
+        .filter(t => props.pages[0] && (t.titleId !== props.pages[0].titleId))
+        .filter((t, i) => {
+            try {
+                const l = 13;
+                const n = Math.floor(props.titles.length / l);
+                const s = props.pages[0].titleId % n;
+                return (i + s) % n === 0;
+            } catch (ex) {
+                return false;
+            }
+        });
+    return (
+        <table className='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Theme</th>
+                    <th>Found Articles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {titles.length > 0 ? titles.map(title =>
+                    <tr key={title.titleId}>
+                        <td><Link to={"/theme/" + title.titleId}>{title.title}</Link></td>
+                        <td>{title.cnt} articles</td>
                     </tr>
                 )
                     :

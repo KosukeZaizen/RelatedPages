@@ -17,12 +17,12 @@ class PagesForTheTitles extends Component {
     }
 
     render() {
-        const page = this.props.pages && this.props.pages.pop();
+        const page = this.props.pages && this.props.pages[0];
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
         const description = `This is a list of the pages related to ${title}. If you want to know about ${title}, please check the list below!`;
         const arrDesc = description.split(". ");
-        const lineChangeDesc = arrDesc.map((d, i) => <span>{d}{i < arrDesc.length - 1 && ". "}<br /></span>);
+        const lineChangeDesc = arrDesc.map((d, i) => <span key={i}>{d}{i < arrDesc.length - 1 && ". "}<br /></span>);
         return (
             <div>
                 <Head

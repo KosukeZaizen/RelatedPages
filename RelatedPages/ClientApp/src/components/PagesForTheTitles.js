@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/RelatedPages';
+import { getEnglishDate } from '../common/functions';
 import Head from './Helmet';
 
 class PagesForTheTitles extends Component {
@@ -16,10 +17,20 @@ class PagesForTheTitles extends Component {
         this.props.requestPagesForTheTitle(titleId);
     }
 
+    componentDidUpdate(preciousProps) {
+        if (preciousProps.pages.length <= 0 && this.props.pages[0].publishDate) {
+            const page = this.props.pages && this.props.pages[0];
+            const publishDate = page && page.publishDate.split("T").shift();
+
+            publishDate && this.props.requestTitlesForTheDate(publishDate.split("-").join(""));
+        }
+    }
+
     render() {
         const page = this.props.pages && this.props.pages[0];
         const title = page && page.title;
         const publishDate = page && page.publishDate.split("T").shift();
+        const englishDate = publishDate && getEnglishDate(publishDate);
         const description = `This is a list of the pages related to ${title}. If you want to know about ${title}, please check the list below!`;
         const arrDesc = description.split(". ");
         const lineChangeDesc = arrDesc.map((d, i) => <span key={i}>{d}{i < arrDesc.length - 1 && ". "}<br /></span>);
@@ -63,6 +74,13 @@ class PagesForTheTitles extends Component {
                 <hr />
                 <h2>Pages related to {title}</h2>
                 {renderTable(this.props)}
+                <hr />
+                <h2>Other themes searched on {englishDate}</h2>
+                {renderOtherTable(this.props)}
+                <center>
+                    <Link to={`/date/${publishDate}`}><button>Check all themes searched on {englishDate} >></button></Link>
+                </center>
+                <br />
             </div>
         );
     }
@@ -83,6 +101,42 @@ function renderTable(props) {
                     <tr key={i}>
                         <td><a href={page.link} target="_blank" rel="noopener noreferrer">{page.pageName}</a></td>
                         <td>{page.explanation}</td>
+                    </tr>
+                )
+                    :
+                    <tr><td>Loading...</td><td></td></tr>}
+            </tbody>
+        </table>
+    );
+}
+
+function renderOtherTable(props) {
+    const titles = props.titles
+        .filter(t => t.titleId !== props.pages[0].titleId)
+        .filter((t, i) => {
+
+            try {
+                const l = 10;
+                const n = Math.floor(props.titles.length / l);
+                const s = props.pages[0].titleId % n;
+                return (i + s) % n === 0;
+            } catch (ex) {
+                return false;
+            }
+        });
+    return (
+        <table className='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Theme</th>
+                    <th>Found Articles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {titles.length > 0 ? titles.map(title =>
+                    <tr key={title.titleId}>
+                        <td><Link to={"/theme/" + title.titleId}>{title.title}</Link></td>
+                        <td>{title.cnt} articles</td>
                     </tr>
                 )
                     :

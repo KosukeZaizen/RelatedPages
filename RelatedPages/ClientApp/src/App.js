@@ -12,8 +12,8 @@ export default () => (
         <ScrollMemory />
         <Switch>
             <Route sensitive exact path='/' component={Home} />
-            <Route sensitive exact path='/date/:date?' component={TitlesForTheDate} />
-            <Route sensitive exact path='/theme/:titleId?' component={PagesForTheTitles} />
+            <Route sensitive exact path='/date/:date' component={TitlesForTheDate} />
+            <Route sensitive exact path='/theme/:titleId' component={PagesForTheTitles} />
             <Route sensitive exact path='/not-found' component={NotFound} />
             <Route component={NotFoundRedirect} />
         </Switch>

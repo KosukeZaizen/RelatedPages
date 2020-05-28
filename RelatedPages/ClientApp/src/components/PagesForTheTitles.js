@@ -57,7 +57,7 @@ class PagesForTheTitles extends Component {
                     <span itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
                         <Link to={"/date/" + publishDate} itemProp="item" style={{ marginRight: "5px", marginLeft: "5px" }}>
                             <span itemProp="name">
-                                {publishDate}
+                                {englishDate}
                             </span>
                             <meta itemProp="position" content="2" />
                         </Link>

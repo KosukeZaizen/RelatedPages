@@ -18,14 +18,14 @@ class PagesForTheTitles extends Component {
 
         const page = this.props.pages && this.props.pages[0];
         const publishDate = page && page.publishDate.split("T").shift();
-
         publishDate && this.props.requestTitlesForTheDate(publishDate.split("-").join(""));
     }
 
     componentDidUpdate(previousProps) {
         const pagesLoaded = previousProps.pages.length <= 0 && this.props.pages[0].publishDate;
+        const pagesChanged = previousProps.pages.length > 0 && (previousProps.pages[0].publishDate !== this.props.pages[0].publishDate);
         const changedTheme = previousProps.location !== this.props.location;
-        if (pagesLoaded || changedTheme) {
+        if (pagesLoaded || pagesChanged || changedTheme) {
             this.fetchData();
         }
     }
@@ -119,7 +119,7 @@ function renderOtherTable(props) {
         .filter(t => props.pages[0] && (t.titleId !== props.pages[0].titleId))
         .filter((t, i) => {
             try {
-                const l = 13;
+                const l = props.titles.length > 13 ? 13 : props.titles.length;
                 const n = Math.floor(props.titles.length / l);
                 const s = props.pages[0].titleId % n;
                 return (i + s) % n === 0;

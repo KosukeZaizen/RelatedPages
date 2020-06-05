@@ -79,12 +79,16 @@ class PagesForTheTitles extends Component {
                 <h2>Pages related to {title}</h2>
                 {renderTable(this.props)}
                 <hr />
-                <h2>Other themes searched on {englishDate}</h2>
-                {renderOtherTable(this.props)}
-                <center>
-                    <Link to={`/date/${publishDate}`}><button>Check all themes searched on {englishDate} >></button></Link>
-                </center>
-                <br />
+                {this.props.titles.length > 1 &&
+                    <React.Fragment>
+                        <h2>Other themes searched on {englishDate}</h2>
+                        {renderOtherTable(this.props)}
+                        <center>
+                            <Link to={`/date/${publishDate}`}><button>Check all themes searched on {englishDate} >></button></Link>
+                        </center>
+                        <br />
+                    </React.Fragment>
+                }
             </div>
         );
     }
